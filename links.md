@@ -3,6 +3,38 @@
 One free county dataset - Fill in request
 https://nationbuilder.com/voterfile
 
+      From States:
+      Alaska
+      Arkansas
+      Colorado
+      Connecticut
+      Delaware
+      District of Columbia
+      Florida
+      Georgia
+      Indiana
+      Iowa
+      Kentucky
+      Louisiana
+      Massachusetts
+      Michigan
+      Mississippi
+      Missouri
+      Montana
+      Nebraska
+      Nevada
+      New Jersey
+      North Carolina
+      Ohio
+      Oklahoma
+      Rhode Island
+      South Carolina
+      South Dakota
+      Texas
+      Utah
+      Vermont
+      Wisconsin
+
 U.S. Census Bureau - Geographies/Select a geographic type/Census tract - 140
 https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml?refresh=t
 
