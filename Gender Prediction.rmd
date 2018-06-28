@@ -1,0 +1,156 @@
+---
+title: "Gender Prediction"
+author: "Mel Maniwan"
+date created: "June 28, 2018"
+output: html_document
+---
+
+# About
+This file contains a solution to a fundamental problem with the VF_file - a lot of missing data on gender for each observation.
+
+Section 1
+The first process is to utilize the prefix column of each observation to assign a gender "M" or "F" if the prefix is present. NA if not.
+
+Section 2
+The second process involves using the gender library to predict gender given first name and DoB when present. This might be a better library to use for East Asian names. This process will be coded later after Section 3 is complete. (Priority for Section 3 is due to the query limit and a running deadline.)
+
+Section 3
+The third process is to utilize genderizeR to predict gender given first name. There is a limit of 1000 queries per day, so a good portion of code in this section is devoted to accounting for names that have been processed. 
+
+# Goal 
+The goal of this project is to account for 99.5% of the observations for purposes of the research project and future projects involving the covariate gender.
+
+# Warning 
+When using the genderizeR library, there is a limit of 1000 queries. Do not just run without taking existing genderizeR related output files into consideration or you will be inefficient.
+
+
+# Preliminaries
+```{R}
+library(foreign)
+library(tidyr)
+suppressMessages(library(dplyr))
+setwd("YOUR CHOICE HERE")
+VF_data <- read.csv("VF.csv", sep = ",")
+VF_sample <- VF_data %>% sample_frac(.05)
+```
+
+# Section 1
+```{R}
+# Choices of prefix are derived from the VF file.
+prefix_choices <- factor(c("Ms","Miss","Mrs","Mr"))
+
+# Assigning Gender to the Sample Dataset
+VF_sample$gender <- ifelse((VF_sample$prefix %in% prefix_choices),
+                           ifelse(VF_sample$prefix == "Ms" | 
+                                    VF_sample$prefix == "Mrs" |
+                                    VF_sample$prefix == "Miss", "F", "M")
+                                    ,NA)
+                                    
+# Check the number of NAs
+sum(is.na(VF_sample$gender))
+
+# Assigning Gender to the Full Dataset
+VF_data$gender <- ifelse((VF_data$prefix %in% prefix_choices),
+                           ifelse(VF_data$prefix == "Ms" | 
+                                    VF_data$prefix == "Mrs" |
+                                    VF_data$prefix == "Miss", "F", "M")
+                                    ,NA)
+                                    
+# Check the number of NAs
+sum(is.na(VF_data$gender))
+```
+
+# Section 2
+```{R}
+library(gender)
+```
+
+# Section 3 
+
+## PREP - WARNING - DO NOT RUN UNLESS genderizer_names dataset is lost. 
+## WARNING! TO AVOID MISTAKES, DO NOT COPY UNLESS YOU PLAN TO USE THIS!
+## If you lost your copy of the genderizeR_names.csv, please contact me and I'll send you a copy.
+```{R}
+x = VF_data[, 4] 
+suppressPackageStartupMessages(library(genderizeR)) 
+givenNames1 <- findGivenNames(x, progress = FALSE) 
+givenNames1 <- givenNames[count > 1] 
+write.csv(givenNames1, file = "genderizeR_names.csv",
+row.names=FALSE)
+```
+
+# Prep
+```{R}
+#From the genderizer_names dataset, covert the objects to a string that is capitalized.
+#https://stackoverflow.com/questions/37158678/capitalize-with-dplyr
+names <- sub("(.)", "\\U\\1", genderizer_names$name, perl=TRUE)
+gender <- factor(c("F","M")) 
+
+# This function creates an operator thats opposite of %in%
+# https://stackoverflow.com/questions/5831794/opposite-of-in
+'%!in%' <- function(x,y)!('%in%'(x,y)) 
+```
+
+## Adding to the existing genderizeR_names.csv
+```{R}
+# Upcase the names
+VF_names <- sub("(.)", "\\U\\1", VF_data$first_name, perl=TRUE)
+# VF_names 
+
+# Make sure that the names being searched for has not been processed.
+namesToQuery <- ifelse((VF_names %!in% names) & is.na(VF_data$gender),
+    sub("(.)", "\\U\\1", VF_data$first_name, perl=TRUE),
+    NA)
+
+# Search for Unique Names
+namesToSearch <- unique(namesToQuery)
+suppressPackageStartupMessages(library(genderizeR)) 
+givenNames1 <- findGivenNames(namesToSearch, progress = FALSE) 
+
+# Make sure count is greater than 1.
+givenNames1 <- givenNames1[count > 1] 
+
+write.csv(givenNames1, file = "genderizeR_names2.csv",row.names=FALSE)
+
+# Load the New and Old Dataset
+genderizer_names <- read.csv("genderizeR_names.csv")
+genderizeR_names2 <- read.csv("genderizeR_names2.csv")
+
+# Combine the previous and new datasets together
+genderizer_names <- rbind(genderizer_names,genderizeR_names2)
+write.csv(genderizeR_names, file = "genderizeR_names.csv",row.names=FALSE)
+```
+
+## Assigning Gender
+```{R}
+genderizer_names <- read.csv("genderizeR_names.csv")
+# Based on the names and probability found in genderizer, if there is an NA in the gender vector 
+# assess if the name associated with the NA is in genderizer, if it is and that name's probability 
+# is at 1, then that genderizer_names' associated stringed gender is equal to female 
+# assign "F", else "M" for male. 
+# 1 is an arbitrary cutoff. However it may be prudent to look only at cases greater than .95.
+# I chose 1 to be cautious. 
+
+VF_sample$gender <- ifelse(is.na(VF_sample$gender),
+       ifelse(VF_sample$first_name %in% names,
+              ifelse(genderizer_names$probability == 1,
+                     ifelse(sub("(.)", "\\U\\1", genderizer_names$gender, perl=TRUE) == "female", "F","M"),
+                     VF_sample$gender),
+                     VF_sample$gender),
+                     VF_sample$gender) 
+
+# To Check the number of NAs left at 100% threshold
+#sum(is.na(VF_sample$gender)) 
+
+# Same process above but with the full dataset
+VF_data$gender <- ifelse(is.na(VF_data$gender),
+       ifelse(VF_data$first_name %in% names,
+              ifelse(genderizer_names$probability == 1,
+                     ifelse(sub("(.)", "\\U\\1", genderizer_names$gender, perl=TRUE) == "female", "F","M"),
+                     VF_data$gender),
+                     VF_data$gender),
+                     VF_data$gender) 
+
+# To Check the number of NAs left at 100% threshold
+# sum(is.na(VF_data$gender)) 
+```
