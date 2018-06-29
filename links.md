@@ -40,7 +40,7 @@ https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml?refresh=t
 
 # Contributor Github Homepages
 
-Lord & Master
+Aspiring Political Scientist
 https://github.com/melmaniwan
 
 The Realest Gringo
