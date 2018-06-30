@@ -1,3 +1,5 @@
+# This File was prepared by Kenneth Foster
+
 setwd("--------insert working directory---------")
 
 # Read in the dataset
