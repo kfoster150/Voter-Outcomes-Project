@@ -48,7 +48,7 @@ Example:
 ## Psephology - Predicting the 2018 Congressional Races - a case study of Orange County (Current)
 - Mel Maniwan, Kenneth Foster, Wesley Bridle, Lorenzo Giamartino
 
-## Psephology - Extending the 2018 Congressional Race Predictions to the battle ground districts (Queue)
+## Psephology - Extending the 2018 OC Congressional Predictions to the Battle Ground Districts (Queue)
 - Mel Maniwan, Kenneth Foster, Wesley Bridle, Lorenzo Giamartino
 
 ## Psephology - Examining Past Presidential and Congressional Elections (Queue)
