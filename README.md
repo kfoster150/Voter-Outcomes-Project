@@ -4,6 +4,7 @@ Repo Objective: The repository commits itself to curating election outcomes data
 The only way these datasets can be useful for future research projects in the realm of Voter Outcomes in the United States (at the very least) is if it becomes easy to contribute more data from past census and election results. This implies that a good portion of data cleaning and wrangling code will be written to making sure that the process is independent of year. This can only be improved with time, since census estimations may differ from year to year as well as changes to what is asked.
 
 # Files
+Our Code of Conduct.md - Reasonable rules so we won't get sued or suffer unnecessary issues.
 
 ReadMe - About repository, its goals and File descriptions.
 
@@ -13,7 +14,7 @@ links.md - Data Source List, Team Members, List of Coding Packages Used and URLs
 
 Gender Prediction.rmd - Created to assign gender to observations in datasets where the variable is missing.
 
-Ken's VH aggregation 6-27.R - Cleaning and Wrangling of support file in a time series format that takes year of vote and type of vote into consideration.
+VH-Cleaning-and-Wrangling.R- Cleaning and Wrangling of support file in a time series format that takes year of vote and type of vote into consideration.
 
 Applied Regionalization.rmd - Created to account for high Margin of Error in the tract level and block level data.
 
