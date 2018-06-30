@@ -6,7 +6,7 @@ The only way these datasets can be useful for future research projects in the re
 # Files
 Our Code of Conduct.md - Reasonable rules so we won't get sued or suffer unnecessary issues.
 
-ReadMe - About repository, its goals and File descriptions.
+README.md - About repository, its goals and File descriptions.
 
 links.md - Data Source List, Team Members, List of Coding Packages Used and URLs.
 
