@@ -1,4 +1,4 @@
-Resonable Rules
+Reasonable Rules
 
 1. Don't get us any of us sued.
 
