@@ -1,0 +1,15 @@
+---
+title: "Regionalization to Account for High Margin of Error in Census Data"
+author: "Mel Maniwan"
+date created: "May 18, 2018"
+output: html_document
+---
+
+About: Political Science Research on the Feasibility and Quality of the Method of Regionalization to Account for High Margin of Error in Census Tract and Block Level Data
+
+Examining Error in the tracts
+```{R
+setwd("insert file here")
+
+```
+
