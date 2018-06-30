@@ -8,5 +8,5 @@ Resonable Rules
 
 4. Comment when possible.
 
-5. Comment in stackoverflow urls to solutions to problems in your code.
+5. Comment stackoverflow urls to solutions to problems in your code.
 
