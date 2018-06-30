@@ -1,3 +1,7 @@
+# Please Read Blog Posts
+
+PRECINT DATA LOCATION GUIDE - https://medium.com/planscore/open-precinct-data-eec479287715
+
 # Data Sources
 
 One free county dataset - Fill in request
