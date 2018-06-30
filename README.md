@@ -39,7 +39,7 @@ Example:
 
 # Research/Project Ideas Related to the Voter Outcomes Project and About
 
-## Political Science Research on the Feasibility and Quality of the Method of Regionalization to Account for High Margin of Error in Census Tract and Block Data (Current)
+## Political Science Research on the Feasibility and Quality of the Method of Regionalization to Account for High Margin of Error in Census Tract and Block Level Data (Current)
 - Mel Maniwan
 
 ## Political Science Research on Voter Behavior Based on Industry Affiliation and Rank of Workers (Current)
