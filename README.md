@@ -46,7 +46,7 @@ Example:
 ## Political Science Research on Voter Behavior Based on Industry Affiliation and Rank of Workers (Current)
 - Mel Maniwan and Lorenzo Giamartino
 
-## Psephology - Predicting the 2018 Congressional Races - a case study of Orange County (Current)
+## Psephology - Predicting the 2018 Congressional Races - A Case Study of Orange County Voting Outcomes (Current)
 - Mel Maniwan, Kenneth Foster, Wesley Bridle, Lorenzo Giamartino
 
 ## Psephology - Extending the 2018 OC Congressional Predictions to the Battleground Congressional Districts (Queue)
