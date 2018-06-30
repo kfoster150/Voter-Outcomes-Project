@@ -37,21 +37,26 @@ Covariates.md - two types (Traditional (t), Treatment (e)) used to forecast elec
 Example: 
 	average_income_tract - (Smith, 1999,e,i), (Adams, 2000, t, i), (Douglas, 2000, t,cv) 
 
-# Research Projects Related to the Voter Outcomes Project
+# Research/Project Ideas Related to the Voter Outcomes Project and About
 
-## Psephology - Predicting the 2018 Congressional Races - a case study of Orange County
+## Psephology - Predicting the 2018 Congressional Races - a case study of Orange County (Current)
 - Mel Maniwan, Kenneth Foster, Wesley Bridle, Lorenzo Giamartino
 
-## Psephology - Predicting the 2020 Presidential and Congressional Races - National Case Study
-- Mel Maniwan 
+## Psephology - Extending the 2018 Congressional Race Predictions to the battle ground districts (Queue)
 
-## Psephology - Examining Past Presidential and Congressional Elections 
+## Psephology - Examining Past Presidential and Congressional Elections (Queue)
 - Mel Maniwan
 
-## Political Science Research on Voter Behavior Based on Industry Affiliation and Rank of Workers
+## Psephology - Predicting the 2020 Presidential and Congressional Races - National Case Study (Queue - Mid 2019)
+- Mel Maniwan 
+
+## Political Science Research on the Feasibility and Quality of the Method of Regionalization to Account for High Margin of Error in Census Tract and Block Data (Current)
+- Mel Maniwan
+
+## Political Science Research on Voter Behavior Based on Industry Affiliation and Rank of Workers (Current)
 - Mel Maniwan and Lorenzo Giamartino
 
-## Political Science Research on Voter Behavior Given Signaling 
+## Political Science Research on Voter Behavior Given Economic Political Signals (Queue)
 - Mel Maniwan 
 
 
