@@ -37,6 +37,9 @@ https://nationbuilder.com/voterfile
 
 U.S. Census Bureau - Geographies/Select a geographic type/Census tract - 140
 https://factfinder.census.gov/faces/nav/jsf/pages/searchresults.xhtml?refresh=t
+About: XOR - Exclusive Or (Example: Salad or Soup)
+
+Select Geographies - Census Tract Level XOR Block Level >> Topic >> Dataset >> Prepare Dataset - Edit which covariates to include
 
 # Contributor Github Homepages
 
