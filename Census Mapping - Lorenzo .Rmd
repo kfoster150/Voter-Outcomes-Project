@@ -18,5 +18,8 @@ Health <- acs.fetch(endyear = 2015, span = 1, geography = geo, table.number = "B
 acs.lookup(2016, 1, keyword = "health insurance", case.sensitive = F, dataset = "acs")
 
 
+library(censusapi)
+data_from_api <- getCensus(name = "acs5",key = "AIzaSyDxmw7JEZIeyzLgDObANzEIxRxxWlOoS7w", vintage = 2015, vars = "B25077_001E", region = "tract:*", regionin = "state:06")
+
 
 ```
