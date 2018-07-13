@@ -1,0 +1,22 @@
+---
+title: "Census Mapping"
+output: html_document
+---
+
+```{r} 
+
+library(tigris)
+library(acs)
+library(stringr)
+
+api.key.install(key="AIzaSyDxmw7JEZIeyzLgDObANzEIxRxxWlOoS7w")
+geo.lookup("CA", "Orange County") # We have now found that Orange County corresponds to number 59. 
+tracts <- tracts(state = "CA", county = 59, cb=TRUE)
+geo <- geo.make(state = c("CA"), county=c(59), tract = "*")
+Health <- acs.fetch(endyear = 2015, span = 1, geography = geo, table.number = "B18135", col.names = "pretty")
+
+acs.lookup(2016, 1, keyword = "health insurance", case.sensitive = F, dataset = "acs")
+
+
+
+```
