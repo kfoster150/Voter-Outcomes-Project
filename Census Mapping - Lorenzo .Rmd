@@ -19,7 +19,29 @@ acs.lookup(2016, 1, keyword = "health insurance", case.sensitive = F, dataset = 
 
 
 library(censusapi)
+
+chi_counties <- c("Orange")
+
+chi_tracts <- tracts(state = "CA", county = chi_counties, 
+                     cb = TRUE)
+
 data_from_api <- getCensus(name = "acs5",key = "AIzaSyDxmw7JEZIeyzLgDObANzEIxRxxWlOoS7w", vintage = 2015, vars = "B25077_001E", region = "tract:*", regionin = "state:06")
+
+values <- data_from_api %>%
+  transmute(GEOID = paste0(state, county, tract), 
+            value = B25077_001E)
+
+
+chi_joined = geo_join(chi_tracts, values, by = "GEOID")
+
+library(tmap)
+tm_shape(chi_joined, projection = 26916) +
+  tm_fill("value", style = "quantile", n = 7, palette = "Greens", 
+          title = "Median Home Values in Orange County") + 
+  tm_legend(bg.color = "white", bg.alpha = 0.6) + 
+  tm_style_gray()
+
+
 
 
 ```
