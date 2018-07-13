@@ -4,44 +4,36 @@ output: html_document
 ---
 
 ```{r} 
-
+# Open Library
 library(tigris)
-library(acs)
-library(stringr)
-
-api.key.install(key="AIzaSyDxmw7JEZIeyzLgDObANzEIxRxxWlOoS7w")
-geo.lookup("CA", "Orange County") # We have now found that Orange County corresponds to number 59. 
-tracts <- tracts(state = "CA", county = 59, cb=TRUE)
-geo <- geo.make(state = c("CA"), county=c(59), tract = "*")
-Health <- acs.fetch(endyear = 2015, span = 1, geography = geo, table.number = "B18135", col.names = "pretty")
-
-acs.lookup(2016, 1, keyword = "health insurance", case.sensitive = F, dataset = "acs")
-
-
+library(censusapi)
+library(tidyverse)
 library(censusapi)
 
+# Specify Counties
 chi_counties <- c("Orange")
 
+# Specify which tracts?
 chi_tracts <- tracts(state = "CA", county = chi_counties, 
                      cb = TRUE)
 
+# Extract data, specify state (LOOK UP STATE NUMBER! THEY DON'T CORRESPOND TO ALPHABETS, THERE ARE SOME NUMBERS SKIPPED)
 data_from_api <- getCensus(name = "acs5",key = "AIzaSyDxmw7JEZIeyzLgDObANzEIxRxxWlOoS7w", vintage = 2015, vars = "B25077_001E", region = "tract:*", regionin = "state:06")
 
+# Create an object that stores these falues in order of geoid coordinates
 values <- data_from_api %>%
   transmute(GEOID = paste0(state, county, tract), 
             value = B25077_001E)
 
-
+# Merge your tract data with your values of interest by geoid 
 chi_joined = geo_join(chi_tracts, values, by = "GEOID")
 
+# 
 library(tmap)
 tm_shape(chi_joined, projection = 26916) +
   tm_fill("value", style = "quantile", n = 7, palette = "Greens", 
           title = "Median Home Values in Orange County") + 
   tm_legend(bg.color = "white", bg.alpha = 0.6) + 
   tm_style_gray()
-
-
-
 
 ```
