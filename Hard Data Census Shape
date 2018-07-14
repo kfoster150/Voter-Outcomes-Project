@@ -1,0 +1,16 @@
+
+
+chi_tracts <- tracts(state = "CA", county = "Orange", 
+                     cb = TRUE)
+
+
+chi_joined = geo_join(chi_tracts, HealthInsurance2, by_sp = "GEOID", by_df="GEO.id")
+
+
+tm_shape(chi_joined, project=26916) +
+  tm_fill("MAP_COLORS", style = "quantile", n = 7, palette = "Greens", 
+          title = "Median Home Values in LA County") + 
+  tm_legend(bg.color = "white", bg.alpha = 0.6) + 
+  tm_style_gray()
+
+#The issue I'm having is that "MAP_COLORS" doesnt reflect the patterns of the data. Rather it just places colors so no one color is up against the other. Previously we had "value" input for colors argument but when trying that here it says there is no such column in the shape object. Weird  
