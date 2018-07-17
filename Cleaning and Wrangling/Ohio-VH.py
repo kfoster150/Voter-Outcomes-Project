@@ -1,3 +1,11 @@
+# This is a modified version of the parser from:
+# https://github.com/pablobarbera/voter-files/blob/master/ohio/parse.py
+# We added more variables to each dataset
+# We use next(reader)
+# We put parenthesis with all print commands
+# Assume Index Here to Start at 0.
+# This is for voter history
+
 newvars = ["voter_id","party_affiliation2000","turnout2000","party_affiliation2002","turnout2002",
            "party_affiliation2004","turnout2004",
            "party_affiliation2008","turnout2008","party_affiliation2010","turnout2010",
