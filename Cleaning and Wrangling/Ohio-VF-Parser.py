@@ -4,7 +4,7 @@
 # We use next(reader)
 # We put parenthesis with all print commands
 # Assume Index Here to Start at 0.
-
+# Needs improvement
 '''
 ohio/parse.py
 Parses Ohio voter file into csv files, one per county,
