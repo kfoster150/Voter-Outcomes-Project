@@ -1,0 +1,136 @@
+---
+title: "Cleaning Voterfiles Orange County"
+author: "Chano"
+date: "July 18, 2018"
+output: html_document
+---
+
+```{r}
+install.packages("tidyr")
+library(tidyr)
+
+#function that parses cols
+paste2 <- function(...,sep=", ") {
+    L <- list(...)
+    L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
+    gsub(paste0("(^",sep,"|",sep,"$)"),"",
+                gsub(paste0(sep,sep),sep,
+                     do.call(paste,c(L,list(sep=sep)))))}
+
+
+#uploading original large voter file 1.5 million observations
+OCAddresses <- read.csv("//Location//...CA-County-Orange-VF.csv")
+
+#dividing file into 3 separate ~500k observation files
+chunk <- 514450
+n <- nrow(OCAddresses)
+r <- rep(1:ceiling(n/chunk), each = chunk [1:n])
+d <- split(OCAddresses, r)
+
+#creating the csv's for each element of d
+write.csv(d[1], file = "///Location//...CA-County-Orange-VF1.csv")
+write.csv(d[2], file = "///Location//...CA-County-Orange-VF2.csv")
+write.csv(d[3], file = "///Location//...CA-County-Orange-VF3.csv")
+
+
+#reading in the 3 separate voter files
+OCAddresses1 <- read.csv("//Location//...CA-County-Orange-VF1.csv")
+
+OCAddresses2 <- read.csv("//Location//...CA-County-Orange-VF2.csv")
+
+OCAddresses3 <- read.csv("//Location//...CA-County-Orange-VF3.csv")
+
+
+#creating a new col that includes street, city, state, zip, separating with comma
+OCAddresses1$full_registered_address <- paste2(OCAddresses1$new_registered_address,
+                                                 OCAddresses1$X1.registered_address__city,
+                                                 OCAddresses1$X1.registered_address__state,
+                                                 OCAddresses1$X1.registered_address__zip, 
+                                                 sep = ", ")
+OCAddresses2$full_registered_address <- paste2(OCAddresses2$new_registered_address,
+                                                 OCAddresses2$X2.registered_address__city,
+                                                 OCAddresses2$X2.registered_address__state,
+                                                 OCAddresses2$X2.registered_address__zip, 
+                                                 sep = ", ")
+OCAddresses3$full_registered_address <- paste2(OCAddresses3$new_registered_address,
+                                                 OCAddresses3$X3.registered_address__city,
+                                                 OCAddresses3$X3.registered_address__state,
+                                                 OCAddresses3$X3.registered_address__zip, 
+                                                 sep = ", ")
+
+
+#creating new data frame that includes only variables of interest
+OCAddresses1.1 <- OCAddresses1$full_registered_address
+OCAddresses1.1 <- as.data.frame(OCAddresses1.1)
+OCAddresses1.1 <- separate(OCAddresses1.1,
+                           col = OCAddresses1.1,
+                           into = c("street", "city", "state", "zip"),
+                           sep = ",")
+OCAddresses2.1 <- OCAddresses2$full_registered_address
+OCAddresses2.1 <- as.data.frame(OCAddresses2.1)
+OCAddresses2.1 <- separate(OCAddresses2.1,
+                           col = OCAddresses2.1,
+                           into = c("street", "city", "state", "zip"),
+                           sep = ",")
+OCAddresses3.1 <- OCAddresses3$full_registered_address
+OCAddresses3.1 <- as.data.frame(OCAddresses3.1)
+OCAddresses3.1 <- separate(OCAddresses3.1,
+                           col = OCAddresses3.1,
+                           into = c("street", "city", "state", "zip"),
+                           sep = ",")
+
+
+#creating csv files with only variables of interest: "street" "city" "state" "zip"
+write.csv(OCAddresses1.1, file = "//Location//...OCAddresses1.1.csv")
+write.csv(OCAddresses2.1, file = "//Location//...OCAddresses2.1.csv")
+write.csv(OCAddresses3.1, file = "//Location//...OCAddresses3.1.csv")
+
+
+#getting rid of excess blank rows
+OCAddresses1.1 <- OCAddresses1.1[1:514450,]
+OCAddresses2.1 <- OCAddresses2.1[1:514450,]
+OCAddresses3.1 <- OCAddresses3.1[1:514450,]
+
+
+
+
+#dividing up each ~500k observation file into chunks of 10k for geocoding
+chunk1 <- 10000
+n1 <- nrow(OCAddresses1.1)
+r1 <- rep(1:ceiling(n1/chunk1), each = chunk1) [1:n1]
+OC1 <- split(OCAddresses1.1, r1)
+
+
+
+chunk2 <- 10000
+n2 <- nrow(OCAddresses2.1)
+r2 <- rep(1:ceiling(n2/chunk2), each = chunk2) [1:n2]
+OC2 <- split(OCAddresses2.1, r2)
+
+
+
+
+chunk3 <- 10000
+n3 <- nrow(OCAddresses3.1)
+r3 <- rep(1:ceiling(n3/chunk3), each = chunk3) [1:n3]
+OC3 <- split(OCAddresses3.1, r3)
+
+
+
+#outputting a new csv file for each element of OC1, OC2, and OC3, which are the chunks of 10k addresses
+
+for(i in 1:52){
+  form = sprintf("C:\\Users\\Chano\\Google Drive\\OCAddresses1.%s.csv", i)
+  write.table(OC1[[i]], sep = ",", col.names = FALSE)
+}
+for(i in 1:52){
+  form = sprintf("C:\\Users\\Chano\\Google Drive\\OCAddresses2.%s.csv", i)
+  write.table(OC2[[i]], sep = ",", col.names = FALSE)
+}
+for(i in 1:52){
+  form = sprintf("C:\\Users\\Chano\\Google Drive\\OCAddresses3.%s.csv", i)
+  write.table(OC3[[i]], sep = ",", col.names = FALSE)
+}
+
+
+```
