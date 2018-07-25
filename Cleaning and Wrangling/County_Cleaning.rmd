@@ -44,9 +44,10 @@ colnames(PVI) <- PVI_Names
 
 
 Put all data here
+Extract Data as Needed from the ACS Files
 ```{r}
 # Codebook
-County_Data <- read.csv("ACS_16_5YR_S0701_with_ann.csv",header=TRUE)
+County_Data <- read.csv("ACS_16_5YR_S0701_with_ann.csV",header=TRUE)
 County_Variable_Detail <- as.data.frame(t(as.vector(County_Data[1,])))
 County_Variable_Detail <- cbind(1:nrow(County_Variable_Detail),County_Variable_Detail)
 
@@ -58,32 +59,110 @@ County_Data <- County_Data[2:nrow(County_Data),]
 
 # Median Age
 PVI[,10:11] <- lapply(104:105, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)])
-
-
 # Total Median Income
 PVI[,12:13] <- as.data.frame(lapply(474:475, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
-
 # Total Education
 PVI[,14:15] <- as.data.frame(lapply(324:325, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
-
 # Total College Attainment
 PVI[,16:17] <- as.data.frame(lapply(364:365, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
-
 # Total Professional Attainment
 PVI[,18:19] <- as.data.frame(lapply(374:375, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
 
 # College Plus over Total Educated Ratio
-#Estimate
-A <- as.numeric(as.character(PVI[,16]))
-B <- as.numeric(as.character(PVI[,18]))
-C <- as.numeric(as.character(PVI[,14]))
+  #Estimate
+  A <- as.numeric(as.character(PVI[,16]))
+  B <- as.numeric(as.character(PVI[,18]))
+  C <- as.numeric(as.character(PVI[,14]))
 PVI[,20] <- (A+B)/C
-#MOE
-A <- as.numeric(as.character(PVI[,17]))
-B <- as.numeric(as.character(PVI[,19]))
-C <- as.numeric(as.character(PVI[,15]))
+  #MOE
+  A <- as.numeric(as.character(PVI[,17]))
+  B <- as.numeric(as.character(PVI[,19]))
+  C <- as.numeric(as.character(PVI[,15]))
 PVI[,21] <- (A+B)/C 
 
+#RACE DATA 2016
+#One.Race.Total.2016
+PVI[,22:23] <- as.data.frame(lapply(144:145, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Two.Races.2016
+PVI[,24:25] <- as.data.frame(lapply(204:205, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Hispanic.Latino.Origin.2016
+PVI[,26:27] <- as.data.frame(lapply(214:215, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Black.2016
+PVI[,28:29] <- as.data.frame(lapply(154:155, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Native.2016
+PVI[,30:31] <- as.data.frame(lapply(164:165, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Asian.2016
+PVI[,32:33] <- as.data.frame(lapply(174:175, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Pacific.Islander.2016
+PVI[,34:35] <- as.data.frame(lapply(184:185, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Other.2016
+PVI[,36:37] <- as.data.frame(lapply(194:195, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
 
-colnames(PVI) <- c(PVI_Names,"MedianAge2016","MedianAgeSE2016", "MedianIncome2016","MedianIncomeSE2016","EdTotal2016","EdTotalSE2016","TotalCollegeEd2016","TotalCollegeEdSE2016","TotalProfEd2016","TotalProfEdSE2016","CollegePlusRatio2016","CollegePlusRatioSE2016")
+#ORIGIN 2016
+#Native.2016
+PVI[,38:39] <- as.data.frame(lapply(234:235, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Foreign.Total.2016
+PVI[,40:41] <- as.data.frame(lapply(244:245, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Naturalized.2016
+PVI[,42:43] <- as.data.frame(lapply(254:255, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+#Not.Citizen.2016
+PVI[,44:45] <- as.data.frame(lapply(264:265, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+colnames(PVI) <- c(PVI_Names,
+                   # General Status 2016
+                   "Median.Age.2016","Median.Age.MOE.2016", 
+                   "Median.Income.2016","Median.Income.MOE.2016",
+                   "Ed.Total.2016","Ed.Total.MOE.2016",
+                   "Total.College.Ed.2016","Total.College.Ed.MOE.2016",
+                   "Total.Prof.Ed.2016","Total.Prof.Ed.MOE.2016",
+                   "College.Plus.Ratio.2016","College.Plus.Ratio.MOE.2016",
+                   # Race Data 2016
+                   "One.Race.Total.2016","One.Race.Total.MOE.2016", 
+                   "Two.Races.2016","Two.Races.MOE.2016",
+                   "Hispanic.Latino.Origin.2016","Hispanic.Latino.Origin.MOE.2016",
+                   "Black.2016","Black.MOE.2016",
+                   "Native.2016","Native.MOE.2016",
+                   "Asian.2016","Asian.MOE.2016",
+                   "Pacific.Islander.2016","Pacific.Islander.MOE.2016",
+                   "Other.2016","Other.MOE.2016",
+                   #Nativity Status 2016
+                   "Native.2016","Native.MOE.2016",
+                   "Foreign.Total.2016","Foreign.Total.MOE.2016",
+                   "Naturalized.2016","Naturalized.MOE.2016",
+                   "Not.Citizen.2016","Not.Citizen.MOE.2016"
+                   )
+
+```
+
+
+```{R}
+names(PVI)
+# Make the variables operationable because they are all factors
+# Brownie points who can make them instantly operational without conversion.
+Binary2016 <- as.numeric(as.character(PVI$Binary2016))
+CollegePlusRatio2016 <- as.numeric(as.character(PVI$College.Plus.Ratio.2016))
+Raw2016 <- as.numeric(as.character(PVI$Raw2016))
+MedianIncome2016 <- as.numeric(as.character(PVI$Median.Income.2016))
+MedianAge2016 <- as.numeric(as.character(PVI$Median.Age.2016))
+
+regressiondata <- cbind.data.frame(Raw2016,Binary2016,CollegePlusRatio2016,MedianIncome2016,MedianAge2016)
+
+Education_model_binary <- lm(data = regressiondata, Raw2016 ~ CollegePlusRatio2016)
+summary(Education_model_binary,cluster = c("cluster"))
+
+Education_model_multiple <- lm(data = regressiondata, Raw2016 ~ CollegePlusRatio2016 + MedianIncome2016 + MedianAge2016)
+summary(Education_model_multiple)
+```
+
+```{R}
+# Function to obtain an estimate of the coefficient from the data
+coeffs_boot_func <- function(formula, data, indices){
+  # allow boot to select a sample
+  d <- data[indices, ]
+  # Given the data, fit into formula
+  fit <- lm(formula, data = d)
+  return(summary(fit)$coefficients)
+}
+
+results <- boot(data = regressiondata, statistic = coeffs_boot_func, R = 10000,  data = regressiondata, formula = Raw2016 ~ CollegePlusRatio2016 + MedianIncome2016 + MedianAge2016)
+
 ```
