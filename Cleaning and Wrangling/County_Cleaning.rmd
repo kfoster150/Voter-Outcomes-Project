@@ -152,19 +152,3 @@ summary(Education_model_binary,cluster = c("cluster"))
 Education_model_multiple <- lm(data = regressiondata, Raw2016 ~ CollegePlusRatio2016 + MedianIncome2016 + MedianAge2016)
 summary(Education_model_multiple)
 ```
-
-```{R}
-#install.packages(boot)
-library(boot)
-# Function to obtain an estimate of the coefficient from the data
-coeffs_boot_func <- function(formula, data, indices){
-  # allow boot to select a sample
-  d <- data[indices, ]
-  # Given the data, fit into formula
-  fit <- lm(formula, data = d)
-  return(summary(fit)$coefficients)
-}
-
-results <- boot(statistic = coeffs_boot_func, R = 10000,  data = regressiondata, formula = Raw2016 ~ CollegePlusRatio2016 + MedianIncome2016 + MedianAge2016)
-
-```
