@@ -1,0 +1,89 @@
+---
+title: "All Counties Regression"
+author: "Reviewed by Mel Maniwan"
+date: "July 23, 2018"
+output: html_document
+---
+
+```{r}
+setwd("C:\\Users\\M\\Desktop\\Elections Forecasting\\")
+
+library(foreign)
+
+# Prepare PVI File
+PVI <- read.csv("PVI Scores.csv",header=TRUE)
+
+# We are going to have to match instead on names, the FIPS
+## Deconstruct OfficialNames Variable into parts separated by commas
+## Combine Numbers together
+## Match on last 5 digits of FIPS to FIPS at the county level...
+## ... for census data.
+PVI$X1 <- gsub("[^[:digit:]]","",PVI$Official.Names)
+PVI$X1 <- substr(PVI$X1,1,5)
+
+### Extracting PVI Scores for use
+# 2012
+Symbols2012 <- gsub("[[:digit:]]","",PVI$X2012)
+Raw2012 <- gsub("[^[:digit:]]","",PVI$X2012)
+# 2016
+Symbols2016 <- gsub("[[:digit:]]","",PVI$X2016)
+Raw2016 <- gsub("[^[:digit:]]","",PVI$X2016)
+
+PVI$Raw2012 <- ifelse(Symbols2012 == "R+",as.numeric(as.character(Raw2012)),-1*as.numeric(as.character(Raw2012)))
+PVI$Raw2016 <- ifelse(Symbols2016 == "R+",as.numeric(as.character(Raw2016)),-1*as.numeric(as.character(Raw2016)))
+
+PVI$Binary2012 <- ifelse(PVI$Raw2012 > 0, 1, 0)
+PVI$Binary2016 <- ifelse(PVI$Raw2016 > 0, 1, 0)
+
+PVI <- cbind.data.frame(PVI[,1:2],PVI[,6],PVI[3:4],PVI[,7:10])
+
+# Names of PVI 
+PVI_Names <- c("State","County","FIPS","PreppedPVI2012","PreppedPVI2016","Raw2012","Raw2016","Binary2012","Binary2016")
+colnames(PVI) <- PVI_Names
+```
+
+
+Put all data here
+```{r}
+# Codebook
+County_Data <- read.csv("ACS_16_5YR_S0701_with_ann.csv",header=TRUE)
+County_Variable_Detail <- as.data.frame(t(as.vector(County_Data[1,])))
+County_Variable_Detail <- cbind(1:nrow(County_Variable_Detail),County_Variable_Detail)
+
+# Eliminate Description
+County_Data <- County_Data[2:nrow(County_Data),]
+
+# Matching County Variables Data with PVI
+# df <- as.data.frame(lapply(104:105, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+
+# Median Age
+PVI[,10:11] <- lapply(104:105, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)])
+
+
+# Total Median Income
+PVI[,12:13] <- as.data.frame(lapply(474:475, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+
+# Total Education
+PVI[,14:15] <- as.data.frame(lapply(324:325, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+
+# Total College Attainment
+PVI[,16:17] <- as.data.frame(lapply(364:365, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+
+# Total Professional Attainment
+PVI[,18:19] <- as.data.frame(lapply(374:375, function(x) County_Data[[x]][match(PVI$FIPS, County_Data$GEO.id2)]))
+
+# College Plus over Total Educated Ratio
+#Estimate
+A <- as.numeric(as.character(PVI[,16]))
+B <- as.numeric(as.character(PVI[,18]))
+C <- as.numeric(as.character(PVI[,14]))
+PVI[,20] <- (A+B)/C
+#MOE
+A <- as.numeric(as.character(PVI[,17]))
+B <- as.numeric(as.character(PVI[,19]))
+C <- as.numeric(as.character(PVI[,15]))
+PVI[,21] <- (A+B)/C 
+
+
+colnames(PVI) <- c(PVI_Names,"MedianAge2016","MedianAgeSE2016", "MedianIncome2016","MedianIncomeSE2016","EdTotal2016","EdTotalSE2016","TotalCollegeEd2016","TotalCollegeEdSE2016","TotalProfEd2016","TotalProfEdSE2016","CollegePlusRatio2016","CollegePlusRatioSE2016")
+```
