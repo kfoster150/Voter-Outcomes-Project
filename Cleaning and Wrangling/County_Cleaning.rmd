@@ -1,6 +1,6 @@
 ---
 title: "All Counties Regression"
-author: "Reviewed by Mel Maniwan"
+author: "Mel Maniwan"
 date: "July 23, 2018"
 output: html_document
 ---
