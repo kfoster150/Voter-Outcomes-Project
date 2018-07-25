@@ -163,6 +163,6 @@ coeffs_boot_func <- function(formula, data, indices){
   return(summary(fit)$coefficients)
 }
 
-results <- boot(data = regressiondata, statistic = coeffs_boot_func, R = 10000,  data = regressiondata, formula = Raw2016 ~ CollegePlusRatio2016 + MedianIncome2016 + MedianAge2016)
+results <- boot(statistic = coeffs_boot_func, R = 10000,  data = regressiondata, formula = Raw2016 ~ CollegePlusRatio2016 + MedianIncome2016 + MedianAge2016)
 
 ```
