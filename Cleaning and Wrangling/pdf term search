@@ -1,0 +1,95 @@
+# WRITTEN IN RSTUDIO
+
+# Set the directory folder, where R will find and create data.
+setwd("---------------")
+
+# IMPORTANT:
+# Create two folders in your working directory titled "manual" and "terms" (case sensitive).
+# The custom functions will not work without these folders present.
+
+# Delete objects from previous runs of code
+rm(list = ls(all = TRUE))
+
+# Install necessary libraries
+library(pdftools)
+library(stringr)
+library(dplyr)
+library(tm)
+
+# Create Vector of terms to search for, based on Bisbee's descriptions.
+allterms <- c("free","trade","immigrants","strengthen",
+              "burden","world","leader")
+
+# standardize terms (only necessary if you include character vectors from outside sources rather than typing them yourself)
+allterms <- tolower(allterms)
+allterms <- str_split(allterms, boundary("word"))
+
+# Create a character vector of all the pdf files in the current working directory.
+# Pro tip: This function will ONLY record the pdf files, even if there are many different types of files in the working directory
+list <- list.files(pattern = ".*.pdf")
+
+# Create a massive function that:
+#   -converts each pdf to text that R can read
+#   -standardizes the text
+#   -Searches each pdf for the keywords previously defined
+#   -If a pdf has no match, it's copied into a folder titled "manual"
+#   -Creates a txt file of matching keywords for each pdf, generates a title, and places it in a folder titled "terms"
+
+getterms <- function(document,keywords = allterms){
+
+x <- print(document, quote = TRUE)
+#y <- paste(x,".pdf", sep = "")
+text<-pdf_text(x)
+text2<- str_split(text, boundary("word"))
+text3 <- unlist(text2)
+text4 <- tolower(text3)
+
+#examine
+is <- keywords %in% text4
+
+terms <- unlist(keywords[is])
+{
+  if(is.null(terms)){
+    print(paste("NO TERMS FOUND IN",x, sep = " "))
+    file.copy(x,"manual\\")
+  }
+  else{
+    filename <- paste("terms\\",x, " terms.txt", sep = "")
+    write.table(terms, filename, quote = FALSE)
+  }
+}
+}
+
+# Using lapply, use the function on the list of pdfs you defined previously.
+woo <- lapply(list, getterms, keywords = allterms)
+
+# Create dataframe showing which terms are present in each pdf
+filelist <- list.files(path = "terms\\", pattern = ".*.txt")
+datalist <- sapply(paste("terms\\",filelist,sep=""), 
+                   function(x)(read.table(x, sep = " ", stringsAsFactors = FALSE)))
+
+# Simplify names
+names(datalist) <- substr(names(datalist),7,100)
+names(datalist) <- gsub('.{16}$', '', names(datalist))
+
+# The next two functions "pad" the list with NA's so that each pdf name can be in the same table even though they don't all match on the same terms.
+na.pad <- function(x,len){
+  x[1:len]
+}
+
+makePaddedDataFrame <- function(l,...){
+  maxlen <- max(sapply(l,length))
+  data.frame(lapply(l,na.pad,len=maxlen),...)
+}
+
+# Use the previously defined functions to convert the list "datalist" into a dataframe
+searchterms <- makePaddedDataFrame(datalist)
+
+# Simplify names
+names(searchterms) <- gsub("[[:punct:]]", "", names(searchterms))
+
+# Convert the dataframe to a table.
+searchterms_table <- t(searchterms)
+
+# Finally, write that table to a csv file so you can quickly examine each file.
+write.csv(searchterms_table, file = "searchterms.csv", na = "")
